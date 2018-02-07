@@ -85,7 +85,8 @@ native.client.group.onError(clientGroup, (webSocket) => {
 });
 
 class WebSocket {
-    constructor(external) {
+    constructor(external, request) {
+        this.request = request;
         this.external = external;
         this.internalOnMessage = noop;
         this.internalOnClose = noop;
@@ -459,7 +460,7 @@ class Server extends EventEmitter {
         });
 
         native.server.group.onConnection(this.serverGroup, (external) => {
-            const webSocket = new WebSocket(external);
+            const webSocket = new WebSocket(external, _upgradeReq);
 
             native.setUserData(external, webSocket);
             this._upgradeCallback(webSocket);
